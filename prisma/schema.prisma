@@ -1,0 +1,94 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Episode {
+  id        Int      @id @default(autoincrement())
+  name      String
+  uuid      String
+  acts      Act[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Act {
+  id        Int      @id @default(autoincrement())
+  name      String
+  uuid      String
+  episode   Episode  @relation(fields: [episodeId], references: [id])
+  episodeId Int
+  matches   Match[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Map {
+  id        Int      @id @default(autoincrement())
+  name      String
+  uuid      String
+  matches   Match[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Match {
+  id        Int      @id @default(autoincrement())
+  gameStart DateTime
+  region    String
+  map       Map      @relation(fields: [mapId], references: [id])
+  mapId     Int
+  act       Act      @relation(fields: [actId], references: [id])
+  actId     Int
+  teams     Team[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Team {
+  id        Int      @id @default(autoincrement())
+  didWin    Boolean
+  teamName  String
+  match     Match    @relation(fields: [matchId], references: [id])
+  matchId   Int
+  players   Player[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Agent {
+  id        Int      @id @default(autoincrement())
+  name      String
+  uuid      String
+  players   Player[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Rank {
+  id        Int      @id @default(autoincrement())
+  name      String
+  uuid      String
+  players   Player[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Player {
+  id        Int      @id @default(autoincrement())
+  rank      Rank     @relation(fields: [rankId], references: [id])
+  rankId    Int
+  agent     Agent    @relation(fields: [agentId], references: [id])
+  agentId   Int
+  team      Team     @relation(fields: [teamId], references: [id])
+  teamId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

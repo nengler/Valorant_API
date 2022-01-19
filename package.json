@@ -1,0 +1,23 @@
+{
+  "name": "valorant-app",
+  "version": "1.0.0",
+  "description": "Valorant App",
+  "main": "app.js",
+  "scripts": {
+    "devStart": "nodemon app.js"
+  },
+  "prisma": {
+    "seed": "node prisma/seed/matches.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^3.8.1",
+    "express": "^4.17.2",
+    "pg": "^8.7.1",
+    "prisma": "^3.8.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
