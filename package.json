@@ -14,10 +14,10 @@
   "dependencies": {
     "@prisma/client": "^3.8.1",
     "express": "^4.17.2",
-    "pg": "^8.7.1",
-    "prisma": "^3.8.1"
+    "pg": "^8.7.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "prisma": "^3.8.1"
   }
 }
