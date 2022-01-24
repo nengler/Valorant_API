@@ -16,7 +16,7 @@ This is the backend of a Valorant API suited to get match statistics that better
 
 
 ## How to run 
-- after all dependencies and backend is setup, run npm run devStart
+- after all dependencies and backend is setup, start server with npm run devStart
 
 ## Endpoints
 - /map
