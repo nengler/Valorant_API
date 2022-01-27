@@ -8,7 +8,7 @@ async function main() {
   const acts = await prisma.act.findMany();
   const ranksLength = ranks.length;
   const actsLength = acts.length;
-  const iterations = Array(1000).fill(0);
+  const iterations = Array(10000).fill(0);
 
   for await (const map of maps) {
     for await (const _i of iterations) {

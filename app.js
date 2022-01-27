@@ -35,7 +35,18 @@ app.get("/maps/:id", async function (req, res) {
     },
   });
 
-  const totalPlayers = await prisma.player.count({
+  // const totalPlayersDB = await prisma.player.count({
+  //   where: {
+  //     team: {
+  //       match: {
+  //         mapId: map.id,
+  //       },
+  //     },
+  //   },
+  // });
+
+  const players = await prisma.player.groupBy({
+    by: ["agentId"],
     where: {
       team: {
         match: {
@@ -43,12 +54,18 @@ app.get("/maps/:id", async function (req, res) {
         },
       },
     },
+    _count: true,
   });
 
-  const players = await prisma.player.groupBy({
+  const totalPlayers = players.reduce(function (acc, obj) {
+    return acc + obj._count;
+  }, 0);
+
+  const playerWinAmounts = await prisma.player.groupBy({
     by: ["agentId"],
     where: {
       team: {
+        didWin: true,
         match: {
           mapId: map.id,
         },
@@ -64,10 +81,14 @@ app.get("/maps/:id", async function (req, res) {
   });
 
   const agentPercentages = players.map(function (p) {
+    const amountWon = playerWinAmounts.filter((a) => a.agentId === p.agentId)[0]._count;
+
     return {
       name: agentOptions[p.agentId],
       totalPicks: p._count,
-      percentage: ((p._count / totalPlayers) * 100).toFixed(2),
+      percentage: p._count / totalPlayers,
+      totalWins: amountWon,
+      winPercentage: amountWon / p._count,
     };
   });
 
@@ -77,7 +98,6 @@ app.get("/maps/:id", async function (req, res) {
   res.json({
     map: map,
     agentPercentages: agentPercentages,
-    totalPlayers: totalPlayers,
     mostCommonComp: mostCommonComp,
   });
 });
